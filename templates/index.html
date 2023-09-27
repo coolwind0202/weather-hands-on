@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<head>
+  <title>{{ data.title }}</title>
+  <link href="{{ url_for('static', filename='style.css')}}" rel="stylesheet" />
+</head>
+<body>
+  <h1>{{ data.title }}</h1>
+
+  <p>{{ data.description.text }}</p>
+
+  <ul class="list">
+    {% for forecast in data.forecasts %}
+    <li class="list__element">
+      <day-card>
+        <span slot="date"> {{ forecast.date }} </span>
+        <div slot="telop">
+          <p>{{ forecast.telop }}</p>
+          <img src="{{ forecast.image.url}}" />
+        </div>
+        <div slot="content">
+          <temperature-info>
+            <span slot="title">気温情報</span>
+            <div slot="max">
+              <h4>最高気温</h4>
+              <p>{{ forecast.temperature.max }}</p>
+            </div>
+            <div slot="min">
+              <h4>最低気温</h4>
+              <p>{{ forecast.temperature.min }}</p>
+            </div>
+          </temperature-info>
+          <weather-detail>
+            <span slot="title">天気の詳細</span>
+            <div slot="weather">
+              <h4>天気</h4>
+              <p>{{ forecast.detail.weather }}</p>
+            </div>
+            <div slot="wind">
+              <h4>風</h4>
+              <p>{{ forecast.detail.wind }}</p>
+            </div>
+            <div slot="wave">
+              <h4>波</h4>
+              <p>{{ forecast.detail.wave }}</p>
+            </div>
+          </weather-detail>
+        </div>
+      </day-card>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <template id="day-card">
+    <style>
+      .day {
+        width: 80vw;
+        display: grid;
+        grid-template-columns: 1fr 6fr;
+
+        padding: 1.5rem;
+        border-radius: 1rem;
+        background-color: skyblue;
+      }
+
+      .day__summary {
+        display: flex;
+        flex-direction: column;
+
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .day__telop {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 5rem;
+        height: 5rem;
+        background-color: white;
+        padding: 1rem;
+        border-radius: 1rem;
+      }
+
+      .day__content {
+        display: flex;
+        flex-direction: column;
+
+        gap: 2rem;
+      }
+    </style>
+    <article class="day">
+      <section class="day__summary">
+        <h3 class="day__date"><slot name="date"></slot></h3>
+        <section class="day__telop">
+          <slot name="telop"></slot>
+        </section>
+      </section>
+      <section>
+        <slot name="content"></slot>
+      </section>
+    </article>
+  </template>
+
+  <template id="temperature-info">
+    <section class="card">
+      <h3 class="card__title"><slot name="title"></slot></h3>
+      <section class="card__part">
+        <slot name="max"></slot>
+      </section>
+      <section class="card__part">
+        <slot name="min"></slot>
+      </section>
+    </section>
+  </template>
+
+  <template id="weather-detail">
+    <section class="card">
+      <h3 class="card__title"><slot name="title"></slot></h3>
+      <section class="card__part">
+        <slot name="weather"></slot>
+      </section>
+      <section class="card__part">
+        <slot name="wind"></slot>
+      </section>
+      <section class="card__part">
+        <slot name="wave"></slot>
+      </section>
+    </section>
+  </template>
+
+  <script src="{{ url_for('static', filename='index.js')}}"></script>
+</body>
